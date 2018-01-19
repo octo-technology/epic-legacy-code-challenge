@@ -21,3 +21,7 @@ Come take up the challenge, with your favourite dev environment!
 ## Facilitator's Readme
 
 Please go to <a href="server/README.md">this Readme</a>.
+
+## Disclaimer
+
+Take a look at the issues to improve this project!
