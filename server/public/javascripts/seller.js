@@ -164,7 +164,7 @@ var SellerView = React.createClass({
 				</div>
 				<hr/>
 				<footer>
-					<p>&copy; Diego &amp; Radwane </p>
+					<p>&copy; OCTO Technology. Based on Extreme Carpaccio game &copy; Diego &amp; Radwane </p>
 				</footer>
 			</div>
 		);
