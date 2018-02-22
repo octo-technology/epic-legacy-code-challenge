@@ -51,6 +51,10 @@ module.exports = function (sellerService, dispatcher) {
       response.status(OK).end();
     }
   });
+  
+  router.get('/rules', function (request, response) {
+      response.redirect('https://goo.gl/EizSMc')
+  });
 
   return router;
 };

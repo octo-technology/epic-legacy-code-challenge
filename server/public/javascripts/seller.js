@@ -21,7 +21,7 @@ var SellerForm = React.createClass({
 	render: function(){
 		return (
 			<div className='jumbotron'>
-				<h2>Hello, Seller!</h2>
+				<h2>Hello, Player!</h2>
 
 				<form className='form-inline' onSubmit={this.handleSubmit}>
 					<div className='form-group'>
