@@ -19,8 +19,8 @@ var writeJson = function (res, content) {
     return;
   }
 
-  res.writeHead(200, {'Content-Type': 'application/json'}); // Uncomment this line and comment the next to enter the game.
-  // res.writeHead(404, {'Content-Type': 'application/json'}); // I don't want to respond. I won't be charged & I won't earn anything.
+  // res.writeHead(200, {'Content-Type': 'application/json'}); // Uncomment this line and comment the next to enter the game.
+  res.writeHead(404, {'Content-Type': 'application/json'}); // I don't want to respond. I won't be charged & I won't earn anything.
 
   res.end(JSON.stringify(content));
 };
