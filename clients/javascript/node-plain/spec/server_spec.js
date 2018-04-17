@@ -23,7 +23,7 @@ describe('Default server', function () {
 
   it('should handle order', function(done) {
     var order = request({url: 'http://' + conf.host + ':' + conf.port + '/order', method: 'POST'}, function (error, response, body) {
-      expect(response.statusCode).toBe(404);
+      expect(response.statusCode).toBe(200);
       expect(body).toBe('{"items":[{"name":"Aged Brie","sellIn":6,"quality":7}]}');
       done();
     });
