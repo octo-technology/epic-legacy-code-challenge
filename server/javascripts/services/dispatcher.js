@@ -84,15 +84,22 @@ BadRequest.prototype = (function () {
     }
 })();
 
-var SellerCashUpdater = function (_sellerService, _orderService) {
+var SellerCashUpdater = function (_sellerService, _orderService, _configuration) {
     this.sellerService = _sellerService;
     this.orderService = _orderService;
+    this.configuration = _configuration;
 };
 
 SellerCashUpdater.prototype = (function () {
     return {
         doUpdate: function (seller, expectedBill, currentIteration) {
             var self = this;
+            function updateCash(seller, expectedBill, actualBill, currentIteration) {
+                var gameIsStarted = self.configuration.all().gameIsStarted;
+                if(gameIsStarted) {
+                    self.sellerService.updateCash(seller, expectedBill, actualBill, currentIteration);
+                }
+            }
             return function (response) {
                 if (response.statusCode === 200) {
                     self.sellerService.setOnline(seller);
@@ -107,7 +114,7 @@ SellerCashUpdater.prototype = (function () {
                         try {
                             var actualBill = utils.jsonify(sellerResponse);
                             self.orderService.validateBill(actualBill);
-                            self.sellerService.updateCash(seller, expectedBill, actualBill, currentIteration);
+                            updateCash(seller, expectedBill, actualBill, currentIteration);
                         } catch (exception) {
                             self.sellerService.notify(seller, {'type': 'ERROR', 'content': exception.message});
                         }
@@ -121,7 +128,7 @@ SellerCashUpdater.prototype = (function () {
 
                 else {
                     self.sellerService.setOnline(seller);
-                    self.sellerService.updateCash(seller, expectedBill, undefined, currentIteration);
+                    updateCash(seller, expectedBill, undefined, currentIteration);
                 }
             }
         }
@@ -134,7 +141,7 @@ var Dispatcher = function (_sellerService, _orderService, _configuration) {
     this.configuration = _configuration;
     this.offlinePenalty = 0;
     this.badRequest = new BadRequest(_configuration);
-    this.sellerCashUpdater = new SellerCashUpdater(_sellerService, _orderService);
+    this.sellerCashUpdater = new SellerCashUpdater(_sellerService, _orderService, _configuration);
 };
 
 Dispatcher.prototype = (function () {

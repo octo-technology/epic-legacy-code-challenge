@@ -541,13 +541,18 @@ describe('Dispatcher', function() {
 });
 
 describe('Seller\'s cash updater', function() {
-    var sellerCashUpdater, configuration, sellerService, orderService;
+    var sellerCashUpdater, configuration, sellerService, orderService, configurationTestDouble;
 
     beforeEach(function() {
-        configuration = new Configuration();
+        configuration = {
+            all: function() {
+                return configurationTestDouble
+            }
+        };
         sellerService = new SellerService();
         orderService = new OrderService(configuration);
-        sellerCashUpdater = new SellerCashUpdater(sellerService, orderService);
+        sellerCashUpdater = new SellerCashUpdater(sellerService, orderService, configuration);
+        configurationTestDouble = {gameIsStarted: true}
     });
 
     it('should deduct a penalty when the sellers\'s response is neither 200 nor 404', function() {
@@ -558,6 +563,17 @@ describe('Seller\'s cash updater', function() {
         sellerCashUpdater.doUpdate(bob, {total: 100}, -1)({statusCode: 400});
 
         expect(sellerService.updateCash).toHaveBeenCalledWith(bob, {total: 100}, undefined, -1);
+    });
+
+    it('should NOT update cash when the game is not started', function() {
+        configurationTestDouble = {gameIsStarted:false};
+        var bob = {name: 'bob', hostname : 'seller', port : '8081', path : '/', cash: 0};
+        spyOn(sellerService, 'setOnline');
+        spyOn(sellerService, 'updateCash');
+
+        sellerCashUpdater.doUpdate(bob, {total: 100}, -1)({statusCode: 400});
+
+        expect(sellerService.updateCash).not.toHaveBeenCalled();
     });
 
     it('should NOT deduct a penalty when the sellers\'s response is 404', function() {
@@ -657,7 +673,6 @@ describe('BadRequest', function(){
 
         expect(sellerService.addCash).toHaveBeenCalledWith(seller, 47, currentIteration);
     });
-
 });
 
 describe('Standard Reduction', function() {

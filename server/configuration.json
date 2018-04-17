@@ -1,6 +1,7 @@
 {
   "reduction": "STANDARD",
   "offlinePenalty": 0,
+  "gameIsStarted": false,
 
   "badRequest": {
     "active": false,
